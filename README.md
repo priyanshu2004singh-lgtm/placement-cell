@@ -1,0 +1,130 @@
+# Student Counselling & Placement Cell
+
+A full-stack DBMS project: **Flask (Python) + MySQL** backend with a **HTML/CSS/JS** frontend.
+It manages students, companies, job roles, placement drives, applications, shortlists,
+results and counselling sessions — with heavy use of real **DBMS concepts**.
+
+---
+
+## Tech Stack
+
+| Layer    | Technology                                   |
+|----------|----------------------------------------------|
+| Backend  | Python 3, Flask, REST API (PyMySQL driver)   |
+| Database | MySQL (InnoDB)                               |
+| Frontend | HTML5, CSS3, Vanilla JavaScript (fetch API)  |
+| Auth     | Flask session + bcrypt password hashing      |
+
+---
+
+## Features by Role
+
+**Student**
+- Register & login, update profile (CGPA, skills, resume)
+- See only drives they are eligible for (branch, CGPA, year, backlogs)
+- Apply to drives (validated by a DB trigger + stored procedure)
+- Track application status, book counselling sessions, cancel them
+
+**Admin**
+- Dashboard with live stats (via SQL view)
+- Manage companies, job roles + eligibility (branches, skills, CGPA, backlogs, year)
+- Schedule drives, open/close/complete them
+- Shortlist applicants by CGPA, publish **selected / rejected** results (blocked until the drive is `completed`)
+- Placement report (view) + recent activity
+
+**Counselor**
+- See assigned counselling sessions, mark them complete with feedback
+- View shortlists/selection results
+
+---
+
+## DBMS Concepts Covered
+
+| Concept             | Where                                                        |
+|---------------------|--------------------------------------------------------------|
+| ER → relational     | Tables in `db/schema.sql` (users, students, companies, job_roles, eligibility, role_branches, role_skills, drives, applications, counselling_sessions) |
+| Normalization (3NF) | 1:1 `users`↔`students`/`counselors`; M:N `role_branches`, `role_skills`; no repeating groups |
+| PRIMARY KEY / FOREIGN KEY | Defined with `ON DELETE CASCADE`                                      |
+| UNIQUE constraint   | `users.email`, `students.rollno`, `applications(student_id, drive_id)` |
+| CHECK constraints   | `cgpa BETWEEN 0-10`, `package_lpa >= 0`, `backlogs >= 0`       |
+| ENUM & NOT NULL     | Roles, statuses, branches; required fields                    |
+| Indexes             | 8 secondary indexes (email, cgpa, drive status, deadlines, slot time…) |
+| Triggers            | `trg_application_eligibility` (blocks ineligible/deadline/applications), `trg_mark_selected` (auto mark student *placed*), `trg_unmark_student` |
+| Stored Procedures   | `sp_apply_drive()` (ACID), `sp_shortlist()` (set-based UPDATE), `sp_set_result()` (ACID + business rule: drive must be completed) |
+| Views               | `v_open_drives`, `v_shortlist`, `v_placement_report`, `v_dashboard_stats` |
+| Transactions / ACID | `START TRANSACTION ... COMMIT / ROLLBACK` in procedures        |
+
+---
+
+## Project Structure
+
+```
+placement-cell/
+├── app.py              # Flask REST API (all endpoints)
+├── config.py           # reads .env config
+├── db.py               # MySQL connection helpers
+├── seed.py             # sample data (idempotent)
+├── test.py             # end-to-end API test
+├── requirements.txt
+├── .env                # DB credentials + secret key
+├── db/
+│   └── schema.sql      # CREATE TABLE / INDEX / TRIGGER / VIEW / PROCEDURE
+└── static/
+    ├── login.html, register.html, student.html, admin.html, counselor.html
+    ├── css/style.css
+    └── js/ api.js login.js register.js student.js admin.js counselor.js
+```
+
+---
+
+## Setup
+
+> Note: MySQL `root` password on this machine was reset to `placement123` during setup.
+> Edit `.env` if yours is different.
+
+```bash
+# 1. Python virtual environment + dependencies
+py -m venv .venv
+.venv\Scripts\pip install -r requirements.txt
+#   (or: pip install flask pymysql python-dotenv cryptography)
+
+# 2. Create schema (drops & recreates placement_db)
+Get-Content db\schema.sql | mysql -u root -pplacement123
+
+# 3. Seed sample data
+.venv\Scripts\python seed.py
+
+# 4. Run
+.venv\Scripts\python app.py
+#    -> open http://127.0.0.1:5000
+```
+
+Or simply double-click **`start.bat`** (installs deps, rebuilds schema, seeds, starts server).
+
+---
+
+## Demo Logins
+
+| Role       | Email                  | Password   |
+|------------|------------------------|------------|
+| Admin      | admin@placement.edu    | admin123   |
+| Counselor  | counselor@placement.edu | coun1234  |
+| Counselor  | dana@placement.edu     | coun1234   |
+| Student    | rohit@student.edu      | stud1234   |
+| Student    | meera@student.edu      | stud1234   |
+| Student    | arjun@student.edu      | stud1234   |
+| Student    | kavya@student.edu      | stud1234   |
+
+---
+
+## Example Behaviour You Can Demo
+
+1. **Kavya (CGPA 6.4, ME)** sees **zero** drives → she is ineligible.
+2. **Meera (CGPA 7.2)** applying to Full Stack (min 7.5) → blocked by trigger:
+   `CGPA below minimum requirement`.
+3. **Admin** `Shortlist by CGPA` → uses `sp_shortlist()`;
+   try selecting before the drive is `completed` → blocked:
+   `Drive must be completed before announcing results`.
+4. Selecting a student **automatically** changes their status to **placed**
+   (`trg_mark_selected`) — visible on the Dashboard.
+5. Duplicate apply → blocked by the `UNIQUE (student_id, drive_id)`.

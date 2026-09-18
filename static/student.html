@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placement Cell - Student</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="title">Placement Cell &#8212; Student Dashboard</div>
+    <div class="right">
+      <span class="who" id="who"></span>
+      <button class="btn small" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+  <p id="msgBox" class="msg" style="padding:8px 24px 0;"></p>
+
+  <div class="tabs" id="tabs">
+    <button class="active" data-tab="tab-dashboard">Dashboard</button>
+    <button data-tab="tab-drives">Open Drives</button>
+    <button data-tab="tab-applications">My Applications</button>
+    <button data-tab="tab-counselling">Counselling</button>
+  </div>
+
+  <div class="container">
+    <!-- Dashboard -->
+    <div class="section active" id="tab-dashboard">
+      <div class="cards" id="statsCards"></div>
+      <div class="panel">
+        <h3>Update My Profile</h3>
+        <div class="form-grid">
+          <div><label class="form-label">CGPA</label><input type="number" id="pCgpa" step="0.01" min="0" max="10"></div>
+          <div><label class="form-label">Backlogs</label><input type="number" id="pBacklogs" min="0"></div>
+          <div><label class="form-label">Skills (comma separated)</label><input type="text" id="pSkills"></div>
+          <div><label class="form-label">Phone</label><input type="text" id="pPhone"></div>
+          <div><label class="form-label">Resume URL</label><input type="text" id="pResume"></div>
+        </div>
+        <div style="margin-top:12px;"><button class="btn primary" id="saveProfile">Save Profile</button></div>
+      </div>
+    </div>
+
+    <!-- Open drives -->
+    <div class="section" id="tab-drives">
+      <div class="panel">
+        <div class="section-head"><h3>Drives you can apply to</h3></div>
+        <table>
+          <thead><tr>
+            <th>Company</th><th>Role</th><th>Package (LPA)</th><th>Eligibility</th>
+            <th>Apply By</th><th>Drive Date</th><th>Venue</th><th></th>
+          </tr></thead>
+          <tbody id="drivesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- My applications -->
+    <div class="section" id="tab-applications">
+      <div class="panel">
+        <h3>My Applications</h3>
+        <table>
+          <thead><tr>
+            <th>Company</th><th>Role</th><th>Package (LPA)</th><th>Applied At</th>
+            <th>Drive Status</th><th>Application Status</th>
+          </tr></thead>
+          <tbody id="appsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Counselling -->
+    <div class="section" id="tab-counselling">
+      <div class="panel">
+        <h3>Book a Counselling Session</h3>
+        <div class="form-row">
+          <select id="counselorSelect"><option value="">-- Select counselor --</option></select>
+          <input type="datetime-local" id="slotTime">
+          <button class="btn primary" id="bookSession">Book Session</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>My Sessions</h3>
+        <table>
+          <thead><tr>
+            <th>Counselor</th><th>Slot Time</th><th>Status</th><th>Feedback</th><th></th>
+          </tr></thead>
+          <tbody id="sessionsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/student.js"></script>
+</body>
+</html>

@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placement Cell - Counselor</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="title">Placement Cell &#8212; Counselor Desk</div>
+    <div class="right">
+      <span class="who" id="who"></span>
+      <button class="btn small" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+  <p id="msgBox" class="msg" style="padding:8px 24px 0;"></p>
+
+  <div class="tabs" id="tabs">
+    <button class="active" data-tab="tab-dashboard">Dashboard</button>
+    <button data-tab="tab-sessions">Sessions</button>
+    <button data-tab="tab-shortlist">Shortlists</button>
+  </div>
+
+  <div class="container">
+    <div class="section active" id="tab-dashboard">
+      <div class="cards" id="statsCards"></div>
+    </div>
+
+    <div class="section" id="tab-sessions">
+      <div class="panel">
+        <h3>Counselling Sessions</h3>
+        <table>
+          <thead><tr>
+            <th>Student</th><th>Roll No</th><th>Slot Time</th><th>Status</th><th>Feedback</th><th></th>
+          </tr></thead>
+          <tbody id="sessionsBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="section" id="tab-shortlist">
+      <div class="panel">
+        <h3>Shortlisted / Selected Students (View)</h3>
+        <table>
+          <thead><tr>
+            <th>Company</th><th>Role</th><th>Student</th><th>Roll No</th><th>Branch</th><th>CGPA</th><th>Status</th>
+          </tr></thead>
+          <tbody id="shortlistBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/counselor.js"></script>
+</body>
+</html>

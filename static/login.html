@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placement Cell - Login</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body class="auth-body">
+  <div class="auth-card">
+    <div class="brand">
+      <h1>Placement Cell</h1>
+      <p>Student Counselling &amp; Placement Management</p>
+    </div>
+    <form id="loginForm">
+      <input type="email" id="email" placeholder="Email address" autocomplete="email" required>
+      <input type="password" id="password" placeholder="Password" autocomplete="current-password" required>
+      <button type="submit" class="btn primary">Login</button>
+      <p id="msg" class="msg"></p>
+    </form>
+    <p class="auth-alt">New student? <a href="/register.html">Create an account</a></p>
+    <div class="demo-box">
+      <strong>Demo logins</strong>
+      <ul>
+        <li>admin@placement.edu / admin123</li>
+        <li>counselor@placement.edu / coun1234</li>
+        <li>rohit@student.edu / stud1234</li>
+      </ul>
+    </div>
+  </div>
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/login.js"></script>
+</body>
+</html>

@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Placement Cell - Admin</title>
+  <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+  <div class="topbar">
+    <div class="title">Placement Cell &#8212; Admin Console</div>
+    <div class="right">
+      <span class="who" id="who"></span>
+      <button class="btn small" id="logoutBtn">Logout</button>
+    </div>
+  </div>
+  <p id="msgBox" class="msg" style="padding:8px 24px 0;"></p>
+
+  <div class="tabs" id="tabs">
+    <button class="active" data-tab="tab-dashboard">Dashboard</button>
+    <button data-tab="tab-companies">Companies</button>
+    <button data-tab="tab-roles">Job Roles</button>
+    <button data-tab="tab-drives">Drives</button>
+    <button data-tab="tab-applications">Applications / Results</button>
+  </div>
+
+  <div class="container">
+    <!-- Dashboard -->
+    <div class="section active" id="tab-dashboard">
+      <div class="cards" id="statsCards"></div>
+      <div class="panel">
+        <h3>Placement Report (View)</h3>
+        <table>
+          <thead><tr><th>Company</th><th>Role</th><th>Applied</th><th>Selected</th></tr></thead>
+          <tbody id="reportBody"></tbody>
+        </table>
+      </div>
+      <div class="panel">
+        <h3>Recent Applications</h3>
+        <table>
+          <thead><tr><th>Student</th><th>Branch</th><th>Company</th><th>Role</th><th>Status</th><th>Applied At</th></tr></thead>
+          <tbody id="recentBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Companies -->
+    <div class="section" id="tab-companies">
+      <div class="panel">
+        <h3>Add Company</h3>
+        <div class="form-row">
+          <input type="text" id="cName" placeholder="Company name" required>
+          <input type="text" id="cSector" placeholder="Sector">
+          <input type="text" id="cWeb" placeholder="Website">
+          <input type="email" id="cEmail" placeholder="Contact email">
+          <button class="btn primary" id="addCompany">Add</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Companies</h3>
+        <table>
+          <thead><tr><th>Name</th><th>Sector</th><th>Website</th><th>Contact</th><th></th></tr></thead>
+          <tbody id="companiesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Roles -->
+    <div class="section" id="tab-roles">
+      <div class="panel">
+        <h3>Add Job Role + Eligibility</h3>
+        <div class="form-grid">
+          <div><label class="form-label">Company</label><select id="rCompany"></select></div>
+          <div><label class="form-label">Title</label><input type="text" id="rTitle" placeholder="e.g. Software Engineer"></div>
+          <div><label class="form-label">Package (LPA)</label><input type="number" id="rPackage" step="0.01" min="0"></div>
+          <div><label class="form-label">Vacancies</label><input type="number" id="rVacancies" min="1" value="5"></div>
+          <div><label class="form-label">Min CGPA</label><input type="number" id="rMinCgpa" step="0.01" min="0" max="10"></div>
+          <div><label class="form-label">Max Backlogs</label><input type="number" id="rMaxBack" min="0" value="0"></div>
+          <div><label class="form-label">Target Year</label>
+            <select id="rYear"><option value="1">1</option><option value="2">2</option><option value="3">3</option><option value="4" selected>4</option></select>
+          </div>
+          <div><label class="form-label">Skills (comma separated)</label><input type="text" id="rSkills" placeholder="Python, SQL"></div>
+        </div>
+        <label class="form-label">Allowed Branches</label>
+        <div class="chips" id="rBranches">
+          <label class="tag"><input type="checkbox" value="CSE" checked> CSE</label>
+          <label class="tag"><input type="checkbox" value="IT"> IT</label>
+          <label class="tag"><input type="checkbox" value="ECE"> ECE</label>
+          <label class="tag"><input type="checkbox" value="CE"> CE</label>
+          <label class="tag"><input type="checkbox" value="ME"> ME</label>
+        </div>
+        <label class="form-label">Description</label>
+        <textarea id="rDesc" rows="2"></textarea>
+        <div style="margin-top:12px;"><button class="btn primary" id="addRole">Add Role</button></div>
+      </div>
+      <div class="panel">
+        <h3>Job Roles</h3>
+        <table>
+          <thead><tr><th>Company</th><th>Role</th><th>Package</th><th>Min CGPA</th><th>Year</th><th>Branches</th><th>Skills</th><th></th></tr></thead>
+          <tbody id="rolesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Drives -->
+    <div class="section" id="tab-drives">
+      <div class="panel">
+        <h3>Schedule Drive</h3>
+        <div class="form-row">
+          <select id="dRole"></select>
+          <input type="datetime-local" id="dDeadline">
+          <input type="date" id="dDate">
+          <input type="text" id="dVenue" placeholder="Venue">
+          <button class="btn primary" id="addDrive">Schedule</button>
+        </div>
+      </div>
+      <div class="panel">
+        <h3>Drives</h3>
+        <table>
+          <thead><tr><th>Company / Role</th><th>Apply By</th><th>Drive Date</th><th>Venue</th><th>Status</th><th>Applied</th><th>Shortlisted</th><th>Actions</th></tr></thead>
+          <tbody id="drivesBody"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- Applications / results -->
+    <div class="section" id="tab-applications">
+      <div class="panel">
+        <h3>Manage Drive</h3>
+        <div class="form-row">
+          <select id="selDrive"></select>
+          <button class="btn primary" id="loadDrive">Load Applicants</button>
+        </div>
+        <div id="driveInfo" style="margin-top:8px;"></div>
+      </div>
+      <div class="panel">
+        <h3>Applicants</h3>
+        <div class="form-row">
+          <input type="number" id="sMinCgpa" placeholder="Shortlist min CGPA (optional)" step="0.01" min="0" max="10" style="max-width:230px;">
+          <button class="btn amber" id="doShortlist">Shortlist by CGPA</button>
+          <span id="vacancyNote" class="muted"></span>
+        </div>
+        <table>
+          <thead><tr><th>Roll No</th><th>Student</th><th>Branch</th><th>CGPA</th><th>Backlogs</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody id="applicantsBody"></tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script src="/static/js/api.js"></script>
+  <script src="/static/js/admin.js"></script>
+</body>
+</html>
