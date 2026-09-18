@@ -76,7 +76,7 @@ CREATE TABLE job_roles (
 
 -- Eligibility criteria (1:1 with job_roles)
 CREATE TABLE eligibility (
-    role_id       INT NOT NULL UNIQUE,
+    role_id       INT NOT NULL PRIMARY KEY,
     min_cgpa      DECIMAL(3,2) NOT NULL DEFAULT 0.00 CHECK (min_cgpa BETWEEN 0.00 AND 10.00),
     max_backlogs  INT NOT NULL DEFAULT 0 CHECK (max_backlogs >= 0),
     academic_year ENUM('1','2','3','4') NOT NULL,

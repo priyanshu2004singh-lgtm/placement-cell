@@ -1,8 +1,11 @@
 import pymysql
-from config import DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME
+from config import DB_HOST, DB_PORT, DB_USER, DB_PASSWORD, DB_NAME, DB_CA
 
 
 def get_conn():
+    ssl_args = {}
+    if DB_CA:
+        ssl_args = {'ca': DB_CA}
     return pymysql.connect(
         host=DB_HOST,
         port=DB_PORT,
@@ -12,6 +15,7 @@ def get_conn():
         cursorclass=pymysql.cursors.DictCursor,
         autocommit=False,
         charset='utf8mb4',
+        ssl=ssl_args if ssl_args else None,
     )
 
 
