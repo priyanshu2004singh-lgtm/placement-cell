@@ -79,8 +79,8 @@ placement-cell/
 
 ## Setup
 
-> Note: MySQL `root` password on this machine was reset to `placement123` during setup.
-> Edit `.env` if yours is different.
+> Note: Put your MySQL credentials in the `.env` file (already gitignored).
+> Follow the example values in `.env` — never commit real passwords.
 
 ```bash
 # 1. Python virtual environment + dependencies
@@ -88,8 +88,8 @@ py -m venv .venv
 .venv\Scripts\pip install -r requirements.txt
 #   (or: pip install flask pymysql python-dotenv cryptography)
 
-# 2. Create schema (drops & recreates placement_db)
-Get-Content db\schema.sql | mysql -u root -pplacement123
+# 2. Create schema (drops & recreates placement_db; you will be asked for the MySQL password)
+Get-Content db\schema.sql | mysql -u root -p
 
 # 3. Seed sample data
 .venv\Scripts\python seed.py
